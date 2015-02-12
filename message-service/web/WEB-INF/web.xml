@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+
+	<!-- Servlet context paramaters -->
+	<context-param>
+		<param-name>default-message</param-name>
+		<param-value>No message!</param-value>	
+	</context-param>
+
+	<servlet>
+		<servlet-name>MessageServlet</servlet-name>
+		<servlet-class>se.coredev.web.MessageServlet</servlet-class>
+		
+		<!-- Servlet config parameters -->
+		<init-param>
+			<param-name>prefix</param-name>
+			<param-value>[@]</param-value>
+		</init-param>
+		
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MessageServlet</servlet-name>
+		<url-pattern>/message</url-pattern>
+	</servlet-mapping>
+
+</web-app>
