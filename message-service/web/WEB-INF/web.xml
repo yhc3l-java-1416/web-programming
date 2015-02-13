@@ -4,11 +4,27 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
 
+
+	<filter>
+		<filter-name>MessageFilter</filter-name>
+		<filter-class>se.coredev.web.MessageFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>MessageFilter</filter-name>
+		<url-pattern>/message</url-pattern>
+	</filter-mapping>
+	
 	<!-- Servlet context paramaters -->
 	<context-param>
 		<param-name>default-message</param-name>
 		<param-value>No message!</param-value>	
 	</context-param>
+
+	<servlet>
+		<servlet-name>ParameterPrinterServlet</servlet-name>
+		<servlet-class>se.coredev.web.ParameterPrinterServlet</servlet-class>
+	</servlet>
 
 	<servlet>
 		<servlet-name>MessageServlet</servlet-name>
@@ -25,6 +41,11 @@
 	<servlet-mapping>
 		<servlet-name>MessageServlet</servlet-name>
 		<url-pattern>/message</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>ParameterPrinterServlet</servlet-name>
+		<url-pattern>/printer</url-pattern>
 	</servlet-mapping>
 
 </web-app>
