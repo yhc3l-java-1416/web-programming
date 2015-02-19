@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import se.coredev.atm.logic.ATM;
 import se.coredev.atm.logic.ATMSession;
 import se.coredev.atm.logic.ATMSessionInvalidationListsner;
+import se.coredev.atm.model.ATMCard;
 
-public final class RequestATMSessionHandler extends AbstractATMOperationHandler
+public final class RequestATMSessionHandler extends AbstractATMRequestHandler
 {
 	private final ATM atm;
 	
@@ -20,10 +20,12 @@ public final class RequestATMSessionHandler extends AbstractATMOperationHandler
 	}
 
 	@Override
-	public String handle(Map<String, ATMSession> atmSessions, HttpServletRequest request, HttpServletResponse response) throws IOException
+	public String doHandle(Map<String, ATMSession> atmSessions, HttpServletRequest request) throws IOException
 	{
 		final Map<String, String> operationData = extractRequestBodyData(request);
-		final ATMSession atmSession = null;
+		final ATMCard atmCard = getATMCard(operationData);
+		final String enteredPin = operationData.get("enteredPin");
+		final ATMSession atmSession = atm.verifyPin(enteredPin, atmCard);
 
 		atmSession.addInvalidationListener(new ATMSessionInvalidationListsner()
 		{
@@ -37,6 +39,11 @@ public final class RequestATMSessionHandler extends AbstractATMOperationHandler
 		atmSessions.put(atmSession.getSessionId(), atmSession);
 
 		return atmSession.getSessionId();
+	}
+	
+	private ATMCard getATMCard(Map<String, String> operationData)
+	{
+		return new ATMCard(operationData.get("accountHolderId"), operationData.get("bankId"), operationData.get("pin"));
 	}
 
 }

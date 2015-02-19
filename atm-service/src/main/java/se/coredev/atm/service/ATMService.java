@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import se.coredev.atm.logic.ATM;
 import se.coredev.atm.logic.ATMSession;
 import se.coredev.atm.logic.Bank;
-import se.coredev.atm.service.operation.ATMOperationHandler;
+import se.coredev.atm.service.operation.ATMRequestHandler;
 import se.coredev.atm.service.operation.OperationHandler;
 import se.coredev.atm.service.operation.RequestATMSessionHandler;
 import se.coredev.atm.service.operation.RequestReceiptHandler;
@@ -29,7 +29,7 @@ public final class ATMService extends HttpServlet
 {
 	private static final long serialVersionUID = -7516548587427690193L;
 	private static final Map<String, ATMSession> atmSessions = new HashMap<>();
-	private static final Map<String, ATMOperationHandler> handlers;
+	private static final Map<String, ATMRequestHandler> handlers;
 
 	static
 	{
@@ -38,7 +38,7 @@ public final class ATMService extends HttpServlet
 		banks.add(new FakeBank("1234-5678", 10000));
 
 		// Mappings
-		handlers = new HashMap<String, ATMOperationHandler>();
+		handlers = new HashMap<String, ATMRequestHandler>();
 		
 		handlers.put("^\\/transaction\\/\\d+\\/receipt\\/?", new RequestReceiptHandler());
 		handlers.put("^\\/session\\/?", new RequestATMSessionHandler(new ATM(banks)));
@@ -46,11 +46,11 @@ public final class ATMService extends HttpServlet
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
 	{
 		try
 		{
-			final String result = getHandler(request).handle(atmSessions, request, response);
+			final String result = getHandler(request).handle(atmSessions, request);
 			writeResponse(response, result, SC_OK);
 		}
 		catch (Exception e)
@@ -60,11 +60,11 @@ public final class ATMService extends HttpServlet
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException
 	{
 		try
 		{
-			final String result = getHandler(request).handle(atmSessions, request, response);
+			final String result = getHandler(request).handle(atmSessions, request);
 			writeResponse(response, result, SC_OK);
 		}
 		catch (Exception e)
@@ -73,18 +73,18 @@ public final class ATMService extends HttpServlet
 		}
 	}
 
-	protected static void writeResponse(final HttpServletResponse response, final String content, final int statusCode) throws IOException
+	private static void writeResponse(final HttpServletResponse response, final String content, final int statusCode) throws IOException
 	{
 		response.setContentType("text/plain");
 		response.setStatus(statusCode);
 		response.getWriter().println(content);
 	}
 	
-	private static ATMOperationHandler getHandler(final HttpServletRequest request)
+	private static ATMRequestHandler getHandler(final HttpServletRequest request)
 	{
 		final String path = request.getPathInfo();
 
-		for (Entry<String, ATMOperationHandler> entry : handlers.entrySet())
+		for (Entry<String, ATMRequestHandler> entry : handlers.entrySet())
 		{
 			if (path.matches(entry.getKey()))
 			{
@@ -92,6 +92,6 @@ public final class ATMService extends HttpServlet
 			}
 		}
 
-		return null;
+		throw new IllegalArgumentException("Could not find handler for path:" + path);
 	}
 }

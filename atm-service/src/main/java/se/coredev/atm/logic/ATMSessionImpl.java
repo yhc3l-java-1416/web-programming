@@ -51,7 +51,7 @@ final class ATMSessionImpl extends AbstractATMSession
 	@Override
 	public Long checkBalance()
 	{
-		if(sessionIsOpen.getAndSet(false))
+		if(sessionIsOpen.getAndSet(false) && sessionIsValid.getAndSet(false))
 		{
 			return bank.getBalance(atmCard.getAccountHolderId());
 		}
