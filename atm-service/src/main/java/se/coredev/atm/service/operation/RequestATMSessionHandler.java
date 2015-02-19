@@ -12,6 +12,11 @@ import se.coredev.atm.model.ATMCard;
 
 public final class RequestATMSessionHandler extends AbstractATMRequestHandler
 {
+	private static final String PIN_KEY = "pin";
+	private static final String BANK_ID_KEY = "bankId";
+	private static final String ACCOUNT_HOLDER_ID_KEY = "accountHolderId";
+	private static final String ENTERED_PIN_KEY = "enteredPin";
+	
 	private final ATM atm;
 	
 	public RequestATMSessionHandler(ATM atm)
@@ -24,7 +29,7 @@ public final class RequestATMSessionHandler extends AbstractATMRequestHandler
 	{
 		final Map<String, String> operationData = extractRequestBodyData(request);
 		final ATMCard atmCard = getATMCard(operationData);
-		final String enteredPin = operationData.get("enteredPin");
+		final String enteredPin = operationData.get(ENTERED_PIN_KEY);
 		final ATMSession atmSession = atm.verifyPin(enteredPin, atmCard);
 
 		atmSession.addInvalidationListener(new ATMSessionInvalidationListsner()
@@ -43,7 +48,6 @@ public final class RequestATMSessionHandler extends AbstractATMRequestHandler
 	
 	private ATMCard getATMCard(Map<String, String> operationData)
 	{
-		return new ATMCard(operationData.get("accountHolderId"), operationData.get("bankId"), operationData.get("pin"));
+		return new ATMCard(operationData.get(ACCOUNT_HOLDER_ID_KEY), operationData.get(BANK_ID_KEY), operationData.get(PIN_KEY));
 	}
-
 }
