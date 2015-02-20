@@ -1,4 +1,4 @@
-package se.coredev.atm.service.operation;
+package se.coredev.atm.service.handler;
 
 import java.io.IOException;
 import java.util.Map;
@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import se.coredev.atm.logic.ATM;
 import se.coredev.atm.logic.ATMSession;
-import se.coredev.atm.logic.ATMSessionInvalidationListsner;
+import se.coredev.atm.logic.ATMSessionInvalidationListener;
 import se.coredev.atm.model.ATMCard;
 
-public final class RequestATMSessionHandler extends AbstractATMRequestHandler
+public final class ATMSessionHandler extends AbstractATMHandler
 {
 	private static final String PIN_KEY = "pin";
 	private static final String BANK_ID_KEY = "bankId";
@@ -19,7 +19,7 @@ public final class RequestATMSessionHandler extends AbstractATMRequestHandler
 	
 	private final ATM atm;
 	
-	public RequestATMSessionHandler(ATM atm)
+	public ATMSessionHandler(ATM atm)
 	{
 		this.atm = atm;
 	}
@@ -32,7 +32,7 @@ public final class RequestATMSessionHandler extends AbstractATMRequestHandler
 		final String enteredPin = operationData.get(ENTERED_PIN_KEY);
 		final ATMSession atmSession = atm.verifyPin(enteredPin, atmCard);
 
-		atmSession.addInvalidationListener(new ATMSessionInvalidationListsner()
+		atmSession.addInvalidationListener(new ATMSessionInvalidationListener()
 		{
 			@Override
 			public void sessionInvalidated(ATMSession atmSession)

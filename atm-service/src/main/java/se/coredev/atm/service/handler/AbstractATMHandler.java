@@ -1,4 +1,4 @@
-package se.coredev.atm.service.operation;
+package se.coredev.atm.service.handler;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import se.coredev.atm.logic.ATMSession;
 
-public abstract class AbstractATMRequestHandler implements ATMRequestHandler
+public abstract class AbstractATMHandler implements RequestHandler
 {
 	private static final String ATM_SESSION_ID = "atmSessionId";
 
@@ -44,9 +44,9 @@ public abstract class AbstractATMRequestHandler implements ATMRequestHandler
 		{
 			for (String entry : requestBody.split(","))
 			{
-				final String[] part = entry.split(":");
-				final String key = part[0];
-				final String value = part[1];
+				final String[] pair = entry.split(":");
+				final String key = StringUtils.defaultIfEmpty(pair[0], "");
+				final String value = StringUtils.defaultIfEmpty(pair[1], "");
 
 				requestBodyData.put(key.trim(), value.trim());
 			}

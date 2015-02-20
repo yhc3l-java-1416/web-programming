@@ -1,4 +1,4 @@
-package se.coredev.atm.service.operation;
+package se.coredev.atm.service.handler;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import se.coredev.atm.logic.ATMSession;
 import se.coredev.atm.model.ATMReceipt;
 
-public final class RequestReceiptHandler extends AbstractATMRequestHandler
+public final class ATMReceiptHandler extends AbstractATMHandler
 {
 
 	@Override

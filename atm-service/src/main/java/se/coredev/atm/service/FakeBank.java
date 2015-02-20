@@ -1,8 +1,6 @@
 package se.coredev.atm.service;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import se.coredev.atm.logic.Bank;
@@ -11,15 +9,11 @@ import se.coredev.atm.model.BankReceipt;
 public final class FakeBank implements Bank
 {
 	private final String bankId;
-	private long balance;
-	private final Map<Long, Integer> transactions;
 	private final AtomicLong transactionIds;
 
-	public FakeBank(final String bankId, final long initialBalance)
+	public FakeBank(final String bankId)
 	{
 		this.bankId = bankId;
-		this.balance = initialBalance;
-		this.transactions = new HashMap<>();
 		this.transactionIds = new AtomicLong(100000);
 	}
 
@@ -32,23 +26,21 @@ public final class FakeBank implements Bank
 	@Override
 	public long getBalance(String accountHolderId)
 	{
-		return balance;
+		// Fake value
+		return 10000;
 	}
 
 	@Override
 	public long withdrawAmount(int amount)
 	{
-		balance = balance - amount;
-		long transactionId = transactionIds.incrementAndGet();
-		transactions.put(transactionId, amount);
-		
-		return transactionId;
+		// Next fake transaction id
+		return transactionIds.incrementAndGet();
 	}
 
 	@Override
 	public BankReceipt requestReceipt(long transactionId)
 	{
-		return new BankReceipt(bankId, transactionId, transactions.get(transactionId), new Date());
+		// Fake receipt
+		return new BankReceipt(bankId, transactionId, 10000, new Date());
 	}
-
 }

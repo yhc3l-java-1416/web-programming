@@ -11,7 +11,7 @@ import se.coredev.atm.model.ATMReceipt;
 
 final class ATMSessionImpl extends AbstractATMSession
 {
-	private final List<ATMSessionInvalidationListsner> listeners;
+	private final List<ATMSessionInvalidationListener> listeners;
 	private final AtomicBoolean sessionIsOpen; 
 	private final AtomicBoolean sessionIsValid; 
 	private final String sessionId;
@@ -19,6 +19,7 @@ final class ATMSessionImpl extends AbstractATMSession
 	public ATMSessionImpl(ATMCard atmCard, Bank bank)
 	{
 		super(atmCard, bank);
+		
 		this.listeners = new ArrayList<>();
 		this.sessionIsOpen = new AtomicBoolean(true);
 		this.sessionIsValid = new AtomicBoolean(true);
@@ -53,7 +54,10 @@ final class ATMSessionImpl extends AbstractATMSession
 	{
 		if(sessionIsOpen.getAndSet(false) && sessionIsValid.getAndSet(false))
 		{
-			return bank.getBalance(atmCard.getAccountHolderId());
+			final Long balance = bank.getBalance(atmCard.getAccountHolderId());
+			notifyListeners();
+			
+			return balance;
 		}
 		throw new ATMException("Session is closed");
 	}
@@ -65,14 +69,14 @@ final class ATMSessionImpl extends AbstractATMSession
 	}
 
 	@Override
-	public void addInvalidationListener(ATMSessionInvalidationListsner listener)
+	public void addInvalidationListener(ATMSessionInvalidationListener listener)
 	{
 		listeners.add(listener);
 	}
 	
 	private void notifyListeners()
 	{
-		for (ATMSessionInvalidationListsner listener : listeners)
+		for (ATMSessionInvalidationListener listener : listeners)
 		{
 			listener.sessionInvalidated(this);
 		}

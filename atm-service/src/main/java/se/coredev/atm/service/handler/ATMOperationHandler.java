@@ -1,4 +1,4 @@
-package se.coredev.atm.service.operation;
+package se.coredev.atm.service.handler;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,7 +9,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import se.coredev.atm.logic.ATMSession;
 
-public final class OperationHandler extends AbstractATMRequestHandler
+public final class ATMOperationHandler extends AbstractATMHandler
 {
 	private static final String AMOUNT_KEY = "amount";
 	private static final String OPERATION_KEY = "operation";

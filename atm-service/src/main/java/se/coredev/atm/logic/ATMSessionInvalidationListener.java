@@ -1,6 +1,6 @@
 package se.coredev.atm.logic;
 
-public interface ATMSessionInvalidationListsner
+public interface ATMSessionInvalidationListener
 {
 	void sessionInvalidated(ATMSession atmSession);
 }

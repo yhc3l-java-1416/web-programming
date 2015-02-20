@@ -12,5 +12,10 @@ public interface ATMSession
 
 	Long checkBalance();
 	
-	void addInvalidationListener(ATMSessionInvalidationListsner listener);
+	/**
+	 * Listeners will be notified when this ATM session is no longer valid
+	 * 
+	 * @param listener
+	 */
+	void addInvalidationListener(ATMSessionInvalidationListener listener);
 }

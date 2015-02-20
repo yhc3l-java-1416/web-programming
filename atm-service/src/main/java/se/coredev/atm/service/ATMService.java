@@ -4,7 +4,7 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,30 +19,29 @@ import javax.servlet.http.HttpServletResponse;
 import se.coredev.atm.logic.ATM;
 import se.coredev.atm.logic.ATMSession;
 import se.coredev.atm.logic.Bank;
-import se.coredev.atm.service.operation.ATMRequestHandler;
-import se.coredev.atm.service.operation.OperationHandler;
-import se.coredev.atm.service.operation.RequestATMSessionHandler;
-import se.coredev.atm.service.operation.RequestReceiptHandler;
+import se.coredev.atm.service.handler.ATMOperationHandler;
+import se.coredev.atm.service.handler.ATMReceiptHandler;
+import se.coredev.atm.service.handler.ATMSessionHandler;
+import se.coredev.atm.service.handler.RequestHandler;
 
 @WebServlet("/atm/*")
 public final class ATMService extends HttpServlet
 {
 	private static final long serialVersionUID = -7516548587427690193L;
 	private static final Map<String, ATMSession> atmSessions = new HashMap<>();
-	private static final Map<String, ATMRequestHandler> handlers;
+	private static final Map<String, RequestHandler> handlers;
 
 	static
 	{
 		// Fake data
-		final List<Bank> banks = new ArrayList<>();
-		banks.add(new FakeBank("1234-5678", 10000));
-
-		// Mappings
-		handlers = new HashMap<String, ATMRequestHandler>();
+		List<Bank> banks = Arrays.asList(new FakeBank("1234-5678"));
 		
-		handlers.put("^\\/transaction\\/\\d+\\/receipt\\/?", new RequestReceiptHandler());
-		handlers.put("^\\/session\\/?", new RequestATMSessionHandler(new ATM(banks)));
-		handlers.put("^\\/operation\\/?", new OperationHandler());
+		// Mappings
+		handlers = new HashMap<String, RequestHandler>();
+		
+		handlers.put("^\\/transaction\\/\\d+\\/receipt\\/?", new ATMReceiptHandler());
+		handlers.put("^\\/session\\/?", new ATMSessionHandler(new ATM(banks)));
+		handlers.put("^\\/operation\\/?", new ATMOperationHandler());
 	}
 
 	@Override
@@ -80,11 +79,11 @@ public final class ATMService extends HttpServlet
 		response.getWriter().println(content);
 	}
 	
-	private static ATMRequestHandler getHandler(final HttpServletRequest request)
+	private static RequestHandler getHandler(final HttpServletRequest request)
 	{
 		final String path = request.getPathInfo();
 
-		for (Entry<String, ATMRequestHandler> entry : handlers.entrySet())
+		for (Entry<String, RequestHandler> entry : handlers.entrySet())
 		{
 			if (path.matches(entry.getKey()))
 			{
