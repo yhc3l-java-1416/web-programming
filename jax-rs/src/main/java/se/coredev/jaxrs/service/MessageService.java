@@ -13,7 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.sun.corba.se.spi.activation.Repository;
+
 
 // http://127.0.0.1:8080/jax-rs/message
 @Path("message")
