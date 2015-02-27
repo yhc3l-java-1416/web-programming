@@ -5,5 +5,8 @@ Class-Path: jersey-container-servlet-core-2.16.jar javax.inject-2.4.0-
  s-2.4.0-b09.jar aopalliance-repackaged-2.4.0-b09.jar hk2-locator-2.4.
  0-b09.jar javassist-3.18.1-GA.jar osgi-resource-locator-1.0.1.jar jer
  sey-server-2.16.jar jersey-client-2.16.jar jersey-media-jaxb-2.16.jar
-  validation-api-1.1.0.Final.jar
+  validation-api-1.1.0.Final.jar jersey-media-moxy-2.16.jar jersey-ent
+ ity-filtering-2.16.jar org.eclipse.persistence.moxy-2.5.0.jar org.ecl
+ ipse.persistence.core-2.5.0.jar org.eclipse.persistence.asm-2.5.0.jar
+  org.eclipse.persistence.antlr-2.5.0.jar gson-2.3.1.jar
 

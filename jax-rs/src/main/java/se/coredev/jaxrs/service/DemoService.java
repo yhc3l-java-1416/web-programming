@@ -1,5 +1,9 @@
 package se.coredev.jaxrs.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -13,7 +17,6 @@ import javax.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public final class DemoService
 {
-
 	@PUT
 	public Response echoMessage(final String message)
 	{
